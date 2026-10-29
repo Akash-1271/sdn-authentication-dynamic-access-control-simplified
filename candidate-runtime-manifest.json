@@ -1,0 +1,18 @@
+{
+  "files": {
+    "auth_server.py": "2e6a073b180739756415c42c73e17b4985a1aec96ea0e82684718aa10fbe12e0",
+    "client.py": "3186deb927273d251c03502ad8d0697af042ec890f734cc1703dde745a089efb",
+    "control_security.py": "d9870b0350a43dbfffc0f71c18e63fa6a9d82793366f512b78f9c4d18518e296",
+    "controller.py": "2dc8fa947cd6f55d4831ee6515418475dd056c475785d94fa62ad5d80b27b454",
+    "controller_client.py": "a2ee63cda41d9c67cf6b9f054dbd90a4a09555f8f679ee0c062561b9891874b2",
+    "demo_checks.py": "551a012b13f5dfe9ce876a446daad906b9865470f9a8c0a6cc78f018f2786f76",
+    "net_protocol.py": "0e297706a72bfdeb1fab8ff88832f7896bfb8c0709cbc4a35f2a6b86d00a811a",
+    "performance_test.py": "3745bac3ca11d849dbaf18bf05b292ebbf6e0893ccbeaccf25e9696bdce459a2",
+    "protected_service.py": "a02d23c6561306bd723a931ebfb2910d61468e423313b473f8f1dcde1a330df9",
+    "requirements.txt": "99e58e705510659d4e8b2a3d007ae8de316c8b587a6ce11c97b780022643fdb1",
+    "summarize_performance.py": "32f047fe78a757d98b886201ffc793fa8e077a9a4fe8c0ebe27d9b285502888d",
+    "topology.py": "333c1813cafe95cd646afe27a56a00906f2a22f2022ee927645918c9a264a032"
+  },
+  "runtime_manifest_sha256": "a65454260fecde78bead6593957a274d29a637d6c1b9ceb747db74b6d4a888bf",
+  "status": "Ubuntu validated 2026-10-29"
+}
