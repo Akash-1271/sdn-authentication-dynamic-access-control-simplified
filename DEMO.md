@@ -1,16 +1,16 @@
 # A 10–15 minute demonstration
 
-**This simplified version passed Ubuntu validation on 26 October 2026.** Keep the original as your fallback. Everything below runs in **Ubuntu**, not Windows.
+**This candidate passed fresh Ubuntu validation on 29 October 2026.** Keep the validated project as your fallback. Everything below runs in **Ubuntu**, not Windows.
 
-The VM handoff should create `/home/akash/sdn-authentication-simplified` and a `.venv311` link to the already working OS-Ken environment. Do not change `/home/akash/cn-project-fallback`.
+The VM handoff should create `/home/akash/sdn-final-simplified-20261029` and a `.venv311` link to the already working OS-Ken environment. Keep both earlier projects unchanged.
 
 ## 1. Prepare once — Ubuntu terminal
 
 ```bash
-cd /home/akash/sdn-authentication-simplified
-mkdir -p /home/akash/.local/state/sdn-simplified
-chmod 700 /home/akash/.local/state/sdn-simplified
-test -f /home/akash/.local/state/sdn-simplified/control.key || python3 control_security.py --generate-key /home/akash/.local/state/sdn-simplified/control.key
+cd /home/akash/sdn-final-simplified-20261029
+mkdir -p /home/akash/.local/state/sdn-final-simplified-20261029
+chmod 700 /home/akash/.local/state/sdn-final-simplified-20261029
+test -f /home/akash/.local/state/sdn-final-simplified-20261029/control.key || python3 control_security.py --generate-key /home/akash/.local/state/sdn-final-simplified-20261029/control.key
 mkdir -p logs
 chmod 700 logs
 ```
@@ -20,7 +20,7 @@ Keep the key private and out of GitHub. Before starting, ensure the original dem
 ## 2. Terminal A — create the network
 
 ```bash
-cd /home/akash/sdn-authentication-simplified
+cd /home/akash/sdn-final-simplified-20261029
 sudo env PYTHONDONTWRITEBYTECODE=1 python3 -B topology.py
 ```
 
@@ -29,8 +29,8 @@ Leave the `mininet>` prompt open. A controller connection warning at this point 
 ## 3. Terminal B — start the controller
 
 ```bash
-cd /home/akash/sdn-authentication-simplified
-PYTHONDONTWRITEBYTECODE=1 SDN_CONTROL_SECRET_FILE=/home/akash/.local/state/sdn-simplified/control.key .venv311/bin/osken-manager --ofp-listen-host 127.0.0.1 --ofp-tcp-listen-port 6653 controller.py
+cd /home/akash/sdn-final-simplified-20261029
+PYTHONDONTWRITEBYTECODE=1 SDN_CONTROL_SECRET_FILE=/home/akash/.local/state/sdn-final-simplified-20261029/control.key .venv311/bin/osken-manager --ofp-listen-host 127.0.0.1 --ofp-tcp-listen-port 6653 controller.py
 ```
 
 Wait for the switch connection message. Say: “The controller installs a default deny rule for the protected service.”
@@ -40,7 +40,7 @@ Wait for the switch connection message. Say: “The controller installs a defaul
 Paste these at `mininet>`, without typing the prompt itself:
 
 ```text
-h_auth env SDN_CONTROL_SECRET_FILE=/home/akash/.local/state/sdn-simplified/control.key AUTH_LOG_FILE=/home/akash/sdn-authentication-simplified/logs/security.log sh -c 'echo $$ > logs/h_auth.pid; exec python3 -B -u auth_server.py' > logs/auth-console.log 2>&1 &
+h_auth env SDN_CONTROL_SECRET_FILE=/home/akash/.local/state/sdn-final-simplified-20261029/control.key AUTH_LOG_FILE=/home/akash/sdn-final-simplified-20261029/logs/security.log sh -c 'echo $$ > logs/h_auth.pid; exec python3 -B -u auth_server.py' > logs/auth-console.log 2>&1 &
 h_srv sh -c 'echo $$ > logs/h_srv.pid; exec python3 -B -u protected_service.py' > logs/service.log 2>&1 &
 h_srv python3 -B demo_checks.py service
 ```
