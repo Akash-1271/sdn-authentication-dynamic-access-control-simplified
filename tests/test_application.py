@@ -4,7 +4,9 @@ import io
 import logging
 import socketserver
 import threading
+import tempfile
 import unittest
+from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 from unittest.mock import patch
 
@@ -13,6 +15,8 @@ import auth_server as auth
 import client
 import demo_checks as demo
 import protected_service
+import performance_test as benchmark
+from summarize_performance import inspect_results
 
 
 @contextlib.contextmanager
@@ -132,6 +136,20 @@ class SessionTests(unittest.TestCase):
                 self.allow.side_effect = OSError("offline")
                 self.assertEqual(demo.controller_down(), 0)
         self.assertFalse(auth.sessions)
+
+    def test_benchmark_over_real_tcp_records_both_modes_and_logs_out(self):
+        with tempfile.TemporaryDirectory() as folder, \
+             listener(auth.handle_client) as auth_port, \
+             listener(protected_service.handle_client) as service_port, \
+             patch.multiple(benchmark, AUTH_HOST="127.0.0.1", AUTH_PORT=auth_port,
+                            SERVICE_HOST="127.0.0.1", SERVICE_PORT=service_port,
+                            TRIALS=2, RESULTS_FILE=Path(folder) / "fresh.csv"):
+            benchmark.run_dynamic()
+            benchmark.run_static()
+            result = inspect_results(benchmark.RESULTS_FILE, expected_trials=2)
+            self.assertEqual(result["rows"], 4)
+            self.assertFalse(auth.sessions)
+            self.assertEqual(self.revoke.call_count, 2)
 
     def test_demo_concurrency_cleans_successful_sessions_after_partial_failure(self):
         responses = [{"ok": True, "session_id": f"test-{i}"} for i in range(4)] + [{"ok": False}]
