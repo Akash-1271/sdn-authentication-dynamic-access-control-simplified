@@ -2,7 +2,7 @@
 
 **This candidate passed fresh Ubuntu validation on 29 October 2026.** Keep the validated project as your fallback. Everything below runs in **Ubuntu**, not Windows.
 
-The VM handoff should create `/home/akash/sdn-final-simplified-20261029` and a `.venv311` link to the already working OS-Ken environment. Keep both earlier projects unchanged.
+The tested application is in `/home/akash/sdn-final-simplified-20261029`, with `.venv311` linked to the working OS-Ken environment. Keep both earlier projects unchanged.
 
 ## 1. Prepare once — Ubuntu terminal
 
@@ -45,7 +45,7 @@ h_srv sh -c 'echo $$ > logs/h_srv.pid; exec python3 -B -u protected_service.py' 
 h_srv python3 -B demo_checks.py service
 ```
 
-The last command must report service success. If not, inspect the logs before proceeding.
+The last command must report service success. If not, inspect the logs before proceeding. If a login times out, its outcome is uncertain: the server may have installed a temporary grant without the client receiving its token. Stop the scenario, allow outstanding requests and leases to settle, and inspect the flow table before retrying. A timeout is not proof that access was never granted.
 
 ## 5. Show blocked → allowed → blocked
 

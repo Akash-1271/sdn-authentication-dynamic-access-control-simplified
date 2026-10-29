@@ -2,7 +2,7 @@
 
 The main project has 11 runtime Python modules and 3 compact test files. This archive retains the larger regression/integration tooling used to verify it. It is separate supporting test code, not extra application functionality.
 
-Extract validation-toolkit.zip into a NEW directory outside the application checkout. The archive includes copies of the exact validated runtime so the original test imports and runner paths remain reproducible. Compare those files against ../candidate-runtime-manifest.json (the files mapping) before testing. Do not modify or overwrite the original fallback.
+Extract validation-toolkit.zip into a NEW directory outside the application checkout. The archive includes copies of the exact validated runtime so the original test imports and runner paths remain reproducible. Compare those files against the files mapping in `<application-checkout>/candidate-runtime-manifest.json`, using the actual path to your application checkout; the manifest is not inside the extracted toolkit. Do not modify or overwrite the original fallback.
 
 On the tested Ubuntu VM, create a .venv311 link in the new validation directory to the existing working controller environment, without reinstalling packages. From that directory:
 

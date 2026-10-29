@@ -72,7 +72,7 @@ python3.11 -m venv .venv311
 PYTHONDONTWRITEBYTECODE=1 .venv311/bin/python -B -m unittest discover -s tests -v
 ```
 
-For a fresh clone, replace the absolute project path in DEMO.md with your checkout path. The guide also explains the private key path and startup commands.
+For a fresh clone, replace the absolute project path in DEMO.md with your checkout path and change `/home/akash/...` private-state paths to your own home directory. The guide also explains the private key path and startup commands.
 
 The controller and auth server require the same private 0600 key through SDN_CONTROL_SECRET_FILE. Generate it outside the repository using control_security.py --generate-key PATH. Demo accounts alice/123 and bob/456 are public lab accounts.
 
@@ -82,6 +82,6 @@ AUTH_LEASE_SECONDS and AUTH_LOCKOUT_SECONDS default to 60. AUTH_LOG_FILE selects
 
 Compare service transaction time for 20 dynamic and 20 static trials. Report login/control overhead separately. Keep all raw samples, mean, median and outliers. The [previous validated results](data/reference-20261026/PERFORMANCE.md) are reference measurements; the fresh final-source batch is in [data/PERFORMANCE.md](data/PERFORMANCE.md).
 
-HMAC authenticates control requests but does not encrypt them. This trusted lab uses plaintext demo credentials/tokens, volatile sessions and source-IP permissions. Users on one host share network access. No IP/ARP anti-spoofing is implemented. Existing grants can survive controller failure until their hard timeout; failed revocations are retryable.
+HMAC authenticates control requests but does not encrypt them. This trusted lab uses plaintext demo credentials/tokens, volatile sessions and source-IP permissions. Users on one host share network access. No IP/ARP anti-spoofing is implemented. Existing grants can survive controller failure until their hard timeout; failed revocations are retryable. A client timeout leaves the login outcome uncertain: a temporary grant may have been installed even if its token was not received.
 
 The project covers TCP authentication, concurrency, sessions/timeouts, dynamic SDN policies, logs, unauthorized-access tests, robustness and baseline evaluation. [RESULTS.md](RESULTS.md) maps requirements to evidence. Extended regression/live tooling is retained under [verification/](verification/README.md).
