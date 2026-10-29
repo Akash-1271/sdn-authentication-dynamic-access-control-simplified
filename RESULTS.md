@@ -61,3 +61,7 @@ This trusted educational lab uses plaintext demo credentials/tokens, volatile se
 ## GitHub publication — 29 October 2026
 
 The final verified runtime, compact tests, documentation, raw performance data and optional verification toolkit are published in this separate simplified repository. Windows verified ZIP/member integrity, source identity, test logs, flow evidence and benchmark statistics before publication. Only documentation wording and setup guidance changed after the Ubuntu return; application runtime and tests remain byte-identical. The original repository and both protected VM project directories remain preserved. The earlier statements about pending publication describe the VM validation stage.
+
+## Development and commit history
+
+The implementation and Ubuntu tests were completed locally before the validated source was uploaded to GitHub. The initial upload records that source snapshot. Later commits group the actual TCP refactor, client/test changes, documentation cleanup and new Ubuntu results. Their timestamps record when those changes were committed to this repository; they are not a diary of every local coding step. Existing commits and dates have been preserved.
