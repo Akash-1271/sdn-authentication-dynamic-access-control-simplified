@@ -3,12 +3,10 @@ import csv
 import argparse
 import json
 import statistics
-import socket
-import sys
 import time
 from pathlib import Path
 
-from net_protocol import receive_line, decode_json
+from net_protocol import exchange_line, decode_json
 
 AUTH_HOST = "10.0.0.3"
 AUTH_PORT = 9000
@@ -29,48 +27,20 @@ def is_original_results(path):
 
 
 def auth_request(request):
-    """Send one newline-delimited JSON request."""
-    deadline = time.monotonic() + 5
-    with socket.create_connection(
-        (AUTH_HOST, AUTH_PORT), timeout=5
-    ) as conn:
-        remaining = deadline - time.monotonic()
-        if remaining <= 0:
-            raise TimeoutError("Authentication operation deadline exceeded")
-        conn.settimeout(remaining)
-        conn.sendall(json.dumps(request).encode("utf-8") + b"\n")
-
-        line = receive_line(conn, 4096, 5, deadline=deadline)
-        if line is None:
-            raise ConnectionError("Authentication server closed")
-        response = decode_json(line)
-        if not isinstance(response, dict):
-            raise ValueError("Expected a JSON object response")
-        return response
+    frame = exchange_line((AUTH_HOST, AUTH_PORT),
+                          json.dumps(request).encode("utf-8") + b"\n", timeout=5)
+    response = decode_json(frame)
+    if not isinstance(response, dict):
+        raise ValueError("Expected a JSON object response")
+    return response
 
 
 def service_request():
-    """Connect to the service, request the protected data, and measure RTT."""
     start = time.perf_counter()
-    deadline = time.monotonic() + 5
-
-    with socket.create_connection(
-        (SERVICE_HOST, SERVICE_PORT), timeout=5
-    ) as conn:
-        remaining = deadline - time.monotonic()
-        if remaining <= 0:
-            raise TimeoutError("Service operation deadline exceeded")
-        conn.settimeout(remaining)
-        conn.sendall(b"GET_SECRET\n")
-
-        response = receive_line(conn, 4096, 5, deadline=deadline)
-        if response is None:
-            raise ConnectionError("Protected service closed")
+    response = exchange_line((SERVICE_HOST, SERVICE_PORT), b"GET_SECRET\n", timeout=5)
     elapsed_ms = (time.perf_counter() - start) * 1000
-
     if not response.startswith("ACCESS GRANTED"):
         raise RuntimeError(f"Unexpected service response: {response}")
-
     return elapsed_ms
 
 

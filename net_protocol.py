@@ -30,6 +30,21 @@ def receive_line(conn, max_bytes, timeout, *, deadline=None):
                 raise ValueError("Message too large")
 
 
+def exchange_line(address, message, *, timeout=5):
+    """Send one request and read one reply within a single time budget."""
+    deadline = time.monotonic() + timeout
+    with socket.create_connection(address, timeout=timeout) as conn:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError("TCP operation deadline exceeded")
+        conn.settimeout(remaining)
+        conn.sendall(message)
+        reply = receive_line(conn, 4096, timeout, deadline=deadline)
+        if reply is None:
+            raise ConnectionError("Peer closed without a response")
+        return reply
+
+
 def serve_threaded(server, handler, *, max_connections=32, busy_response=b"ERR busy\n", stop_event=None):
     slots = threading.BoundedSemaphore(max_connections)
 
